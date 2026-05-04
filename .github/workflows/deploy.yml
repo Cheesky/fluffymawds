@@ -23,4 +23,4 @@ jobs:
           cd /home/cheesky/minecraft/
 
           # Refresh only the nginx container
-          docker compose up -d --build fluffy_main
+          docker compose up -d --build fluffymawds_main
