@@ -13,7 +13,7 @@ jobs:
       - name: Update Web Files and Restart
         run: |
           # Use the absolute path to your live site folder
-          rsync -avz --delete ./html/ /home/cheesky/minecraft/html/
+          rsync -avz --delete ./html/ /home/cheesky/minecraft/
 
           # Move to the directory containing your docker-compose.yml
           cd /home/cheesky/minecraft/
