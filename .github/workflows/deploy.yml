@@ -1,0 +1,22 @@
+name: Auto Deploy Portfolio
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  deploy:
+    runs-on: self-hosted
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Update Web Files and Restart
+        run: |
+          # Use the absolute path to your live site folder
+          rsync -avz --delete ./html/ /home/cheesky/minecraft/html/
+
+          # Move to the directory containing your docker-compose.yml
+          cd /home/cheesky/minecraft/
+
+          # Refresh only the nginx container
+          docker compose up -d --build fluffy_main
