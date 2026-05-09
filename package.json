@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/Cheesky/fluffymawds#readme",
   "devDependencies": {
+    "@tailwindcss/cli": "^4.3.0",
     "tailwindcss": "^4.3.0"
   }
 }
