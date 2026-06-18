@@ -1,10 +1,299 @@
 @import "tailwindcss";
 
 @theme {
-  --animate-gradient: gradient 8s ease infinite;
+  --color-brand-body:   #252642;
+  --color-brand-grid:   #132148;
+  --color-brand-footer: #347769;
 
-  @keyframes gradient {
-    0%, 100% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
+  /* Character slot + info panel shared background colors */
+  --color-amy:     #0d2e1f;
+  --color-cheesky: #0a1f2e;
+
+  --font-display: "Fredoka", sans-serif;
+  --font-body:    "Quicksand", sans-serif;
+
+  --radius-xl:  1rem;
+  --radius-2xl: 1.5rem;
+  --radius-3xl: 2rem;
+}
+
+/* ── hide scrollbar ── */
+::-webkit-scrollbar {
+  display: none;
+}
+
+@layer components {
+
+  /* ── character stage ── */
+  .chars {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    position: relative;
+    border-radius: var(--radius-3xl);
+    overflow: hidden;
   }
+
+  .char-slot {
+    position: relative;
+    cursor: pointer;
+    aspect-ratio: 9 / 16;
+    overflow: hidden;
+    /*
+     * outline is used for the hover/active ring instead of a ::after border.
+     * Unlike box-shadow or ::after borders, outline is NOT clipped by a
+     * parent's overflow:hidden, so it correctly follows the slot's own
+     * border-radius without being chopped into a rectangle.
+     */
+    outline: 3px solid transparent;
+    outline-offset: -3px;
+    transition: outline-color 0.2s;
+  }
+
+  /* Give each slot its outer corner radii — outline follows these */
+  #slot-amy {
+    background-color: var(--color-amy);
+    border-top-left-radius: var(--radius-3xl);
+    border-bottom-left-radius: var(--radius-3xl);
+    border-right: 1px solid rgb(148 163 184 / 0.1);
+  }
+
+  #slot-cheesky {
+    background-color: var(--color-cheesky);
+    border-top-right-radius: var(--radius-3xl);
+    border-bottom-right-radius: var(--radius-3xl);
+  }
+
+  .char-slot img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top center;
+    transform: scale(1.05);
+    transform-origin: top center;
+    transition: filter 0.35s ease;
+    display: block;
+  }
+
+  /* Hover: show white outline ring */
+  .char-slot:hover {
+    outline-color: rgb(255 255 255 / 0.75);
+  }
+
+  /* Active (selected): brighter ring */
+  .char-slot.active {
+    outline-color: rgb(255 255 255 / 0.95);
+  }
+
+  /* Inactive: no ring, dimmed image, no pointer */
+  .char-slot.inactive {
+    cursor: default;
+    outline-color: transparent;
+  }
+
+  .char-slot.inactive img {
+    filter: brightness(0.3) grayscale(50%);
+  }
+
+  /* ── name label (gradient fades into the slot's own bg color) ── */
+  .char-name-label {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 3rem 1.25rem 1.25rem;
+    text-align: center;
+    z-index: 3;
+    transition: opacity 0.3s;
+  }
+
+  #slot-amy .char-name-label {
+    background: linear-gradient(to top, var(--color-amy) 0%, transparent 100%);
+  }
+
+  #slot-cheesky .char-name-label {
+    background: linear-gradient(to top, var(--color-cheesky) 0%, transparent 100%);
+  }
+
+  .char-name-label h2 {
+    font-family: var(--font-display);
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: #fff;
+  }
+
+  .char-name-label span {
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  .char-slot.inactive .char-name-label {
+    opacity: 0;
+  }
+
+  /* ── info overlay panels ── */
+  .info-overlay {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 50%;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 1.5rem;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.35s ease;
+    backdrop-filter: blur(6px);
+    text-align: center;
+  }
+
+  .info-overlay.visible {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  /* Amy info → RIGHT side (over Cheesky), Amy's color */
+  .info-overlay.amy-info {
+    right: 0;
+    background-color: color-mix(in oklch, var(--color-amy) 93%, transparent);
+  }
+
+  /* Cheesky info → LEFT side (over Amy), Cheesky's color */
+  .info-overlay.cheesky-info {
+    left: 0;
+    background-color: color-mix(in oklch, var(--color-cheesky) 93%, transparent);
+  }
+
+  /* ── info panel internals ── */
+  .info-tag {
+    display: inline-block;
+    border-radius: 999px;
+    padding: 0.2rem 0.85rem;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.75rem;
+  }
+
+  .tag-emerald {
+    background: rgb(16 185 129 / 0.12);
+    border: 1px solid rgb(16 185 129 / 0.35);
+    color: var(--color-emerald-300);
+  }
+
+  .tag-cyan {
+    background: rgb(6 182 212 / 0.12);
+    border: 1px solid rgb(6 182 212 / 0.35);
+    color: var(--color-cyan-300);
+  }
+
+  .info-name {
+    font-family: var(--font-display);
+    font-size: 2rem;
+    font-weight: 700;
+    color: #fff;
+    line-height: 1.1;
+  }
+
+  .info-handle {
+    font-size: 0.82rem;
+    font-weight: 600;
+    margin-top: 0.3rem;
+  }
+
+  .info-quote {
+    margin-top: 1rem;
+    font-style: italic;
+    font-size: 0.85rem;
+    color: var(--color-slate-200);
+  }
+
+  .info-sub {
+    font-size: 0.75rem;
+    margin-top: 0.3rem;
+    font-weight: 600;
+  }
+
+  .info-divider {
+    width: 40px;
+    height: 1px;
+    background: rgb(148 163 184 / 0.25);
+    margin: 1rem auto;
+  }
+
+  .info-socials {
+    display: flex;
+    justify-content: center;
+    gap: 1.1rem;
+  }
+
+  .info-socials a {
+    color: rgb(148 163 184 / 0.75);
+    transition: color 0.2s;
+  }
+
+  .info-socials.emerald a:hover { color: var(--color-emerald-300); }
+  .info-socials.cyan    a:hover { color: var(--color-cyan-300); }
+
+  .close-hint {
+    margin-top: 1.25rem;
+    font-size: 0.68rem;
+    color: rgb(148 163 184 / 0.45);
+    letter-spacing: 0.04em;
+    font-weight: 600;
+    text-transform: uppercase;
+  }
+
+  /* ── footer nav buttons ── */
+  .footer-nav {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+  }
+
+  .footer-nav-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    border-radius: 999px;
+    background: rgb(15 23 42 / 0.4);
+    border: 1px solid rgb(255 255 255 / 0.1);
+    padding: 0.6rem 1.25rem;
+    font-weight: 600;
+    font-size: 1.5rem;
+    color: #fff;
+    text-decoration: none;
+    box-shadow: 0 1px 3px rgb(0 0 0 / 0.2);
+    transition: background 0.2s, border-color 0.2s;
+  }
+
+  .footer-nav-btn:hover {
+    background: rgb(15 23 42 / 0.65);
+    border-color: rgb(255 255 255 / 0.2);
+  }
+
+  .comm-scroll {
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-amy) transparent;
+  }
+
+  .comm-scroll::-webkit-scrollbar {
+    height: 4px;
+  }
+
+  .comm-scroll::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .comm-scroll::-webkit-scrollbar-thumb {
+    background-color: var(--color-amy);
+    border-radius: 9999px;
+  }
+  
 }

@@ -1,0 +1,58 @@
+[
+  {
+    "id": 1,
+    "image": "src/avif/kaincommshalftp.avif",
+    "full_image": "src/kaincommshalftp.png",
+    "date": "2026-06-14",
+    "tags": ["Commission"]
+  },
+  {
+    "id": 2,
+    "image": "src/avif/skullcomm.avif",
+    "full_image": "src/skullcomm.png",
+    "date": "2026-06-03",
+    "tags": ["Commission"]
+  },
+  {
+    "id": 3,
+    "image": "src/avif/subnautica2experimental2.avif",
+    "full_image": "src/subnautica2experimental2.png",
+    "date": "2026-05-25",
+    "tags": ["Personal", "Fan-art"]
+  },
+  {
+    "id": 4,
+    "image": "src/avif/AmyBG.avif",
+    "full_image": "src/AmyBG.png",
+    "date": "2026-05-22",
+    "tags": ["Personal"]
+  },
+  {
+    "id": 5,
+    "image": "src/avif/nexxiecSHD.avif",
+    "full_image": "src/nexxiecSHD.png",
+    "date": "2026-05-15",
+    "tags": ["Commission"]
+  },
+  {
+    "id": 6,
+    "image": "src/avif/shardcomm.avif",
+    "full_image": "src/shardcomm.png",
+    "date": "2026-05-12",
+    "tags": ["Commission"]
+  },
+  {
+    "id": 7,
+    "image": "src/avif/featured.avif",
+    "full_image": "src/featured.jpg",
+    "date": "2026-05-03",
+    "tags": ["Personal"]
+  },
+  {
+    "id": 8,
+    "image": "src/avif/ustwocyberpunk.avif",
+    "full_image": "src/ustwocyberpunk.png",
+    "date": "2026-04-30",
+    "tags": ["Personal"]
+  }
+]
